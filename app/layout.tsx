@@ -9,18 +9,22 @@ import { ReactNode } from 'react';
 import { Toaster } from 'sonner';
 import './globals.css';
 
-const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
+// Dynamically determine the base URL for production and local environments
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
   : 'http://localhost:3000';
+
+// Ensure Twitter handle starts with '@' and site URL starts with 'https://'
+const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
 const twitterCreator = TWITTER_CREATOR ? ensureStartsWith(TWITTER_CREATOR, '@') : undefined;
 const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : undefined;
 
+// Set up metadata for SEO and social sharing
 export const metadata = {
-  metadataBase: new URL(baseUrl),
+  metadataBase: new URL(baseUrl), // Ensure the base URL resolves correctly
   title: {
-    default: SITE_NAME!,
-    template: `%s | ${SITE_NAME}`
+    default: SITE_NAME || 'My E-commerce Site', // Fallback title
+    template: `%s | ${SITE_NAME || 'My E-commerce Site'}` // Title format for specific pages
   },
   robots: {
     follow: true,
@@ -36,9 +40,12 @@ export const metadata = {
     })
 };
 
+// Root Layout component wrapping the page content
 export default async function RootLayout({ children }: { children: ReactNode }) {
+  // Retrieve cartId from cookies
   const cartId = (await cookies()).get('cartId')?.value;
-  // Don't await the fetch, pass the Promise to the context provider
+
+  // Don't await here, pass the Promise to the context provider
   const cart = getCart(cartId);
 
   return (

@@ -4,7 +4,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import type { ListItem } from '.';  // Assuming ListItem is defined somewhere in your project
+import type { ListItem } from '.'; // Assuming ListItem is defined somewhere in your project
 import { FilterItem } from './item';
 
 export default function FilterItemDropdown({ list }: { list: ListItem[] }) {
@@ -36,7 +36,7 @@ export default function FilterItemDropdown({ list }: { list: ListItem[] }) {
         ('path' in listItem && pathname === listItem.path) ||
         ('slug' in listItem && searchParams.get('sort') === listItem.slug)
     );
-    
+
     if (activeItem) {
       setActive(activeItem.title);
     }
